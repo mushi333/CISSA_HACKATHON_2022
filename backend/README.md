@@ -10,3 +10,6 @@ python -m venv env
 ```
 python app.py
 ```
+
+## To do
+Update from the current template provided in the hackathon to the one matching the frontend application.
