@@ -2,7 +2,7 @@ from flask import Flask
 from flask_pymongo import pymongo
 from app import app
 
-CONNECTION_STRING = "mongodb+srv://elgoog:MMv18BB7mCPDaP1@cluster0.b1uwkfv.mongodb.net/?retryWrites=true&w=majority"
+CONNECTION_STRING = "mongodb+srv://elgoog:MMv18xBB7mCPDaP1@cluster0.b1uwkfv.mongodb.net/?retryWrites=true&w=majority"
 
 client = pymongo.MongoClient(CONNECTION_STRING)
 
