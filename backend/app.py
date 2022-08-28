@@ -2,13 +2,12 @@ from flask import Flask, jsonify, request
 import db
 from bson import ObjectId
 
-
 app = Flask(__name__)
 
 # Sample API, this does not use the database at all
-@app.route('/')
-def flask_mongodb_atlas():
-    return "flask mongodb atlas!"
+# @app.route('/')
+# def flask_mongodb_atlas():
+#     return "flask mongodb atlas!"
 
 
 # API to add one recipe to database
@@ -16,7 +15,7 @@ def flask_mongodb_atlas():
 @app.route('/addOne', methods=["POST"])
 def addOne():
      input_json = request.get_json(force=True) 
-     dictToReturn = {'name': input_json['name'], 'ingredients': input_json['ingredients'], 'method' : input_json['method']}
+     dictToReturn = {'username': input_json['username'], 'password': input_json['password']}
      jsonify_version = jsonify(dictToReturn)
      db.db.collection.insert_one(dictToReturn)
      return jsonify_version
@@ -48,6 +47,19 @@ def removeOne():
      # Remove from database
      db.db.collection.delete_one(dictToReturn)
      return {"_id": input_json["_id"]}
+
+
+# API to add one recipe to database
+# When testing, must use double quotes in postman for POST body
+@app.route('/verify', methods=["POST"])
+def verify():
+     input_json = request.get_json(force=True)
+     dictToReturn = {'username': input_json['username'], 'password': input_json['password']}
+     jsonify_version = jsonify(dictToReturn)
+     
+     db.db.collection.(dictToReturn)
+     return jsonify_version==dictToReturn
+
 
 # Put this below all APIs
 if __name__ == '__main__':

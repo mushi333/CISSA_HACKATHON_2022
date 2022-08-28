@@ -7,7 +7,7 @@ CONNECTION_STRING = "mongodb+srv://elgoog:MMv18xBB7mCPDaP1@cluster0.b1uwkfv.mong
 client = pymongo.MongoClient(CONNECTION_STRING)
 
 # This will either find this database if it already exists, or create one
-db = client.get_database('flask_mongodb_atlas')
+db = client.get_database('user_db')
 
 # This will create a collection named 'collection' within the above database
 user_collection = pymongo.collection.Collection(db, 'user_collection')
