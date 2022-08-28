@@ -18,25 +18,26 @@ def euclidean_distance(fw1, fw2):
     return distance
 
 
-def order(database, new_man, k):
-    pd.DataFrame(database)
+def order(database, new_man):
+    df = pd.DataFrame(database)
+
+    i = 0
+    distance_list = []
+    while i < len(database):
+        temp_vec = df.iloc[i, 1:].tolist()
+        distance = euclidean_distance(temp_vec, new_man[1:])
+        i = i+1
+        distance_list.append(distance)
+
+    df['distance'] = distance_list
+
+    df = df.sort_values(by=['distance'])
+
     
-sequence = sorted(dic.items(), key=lambda x: x[1])
-        max_data = max(count)  # find if there is two equal amount majorities. try to confirm if the tie at prediction exists.
-        max_index =[i for i, j in enumerate(count) if j == max_data] 
-        #print(max_index)
-        
-        position_dic = dict(zip(range(4), ['cheap', 'affordable', 'expensive', 'very expensive']))
-        
-        if len(max_index) == 1:  # if there is no tie at prediction time, return the result
-            prediction = position_dic[max_index[0]]
-            
-        else:  # The judgement code to solve the ties at prediction time
-            max_list = [position_dic[i] for i in max_index]  #find all existing majority labels
-            #print(max_list)
-            for label in selected_labels:    # check the selected labels list, find which label is the nearest since this list is sorted by the distance order
-                if label in max_list:  
-                    prediction = label
-                    break
+
+    return df.iloc[:, 0].tolist()
+    
+
+
 
 print(order(database, new_man))
