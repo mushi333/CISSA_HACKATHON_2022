@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 import db
 from bson import ObjectId
+import hashlib
 
 app = Flask(__name__)
 
@@ -14,8 +15,9 @@ app = Flask(__name__)
 # When testing, must use double quotes in postman for POST body
 @app.route('/addOne', methods=["POST"])
 def addOne():
+     m = hashlib.md5()
      input_json = request.get_json(force=True) 
-     dictToReturn = {'username': input_json['username'], 'password': input_json['password']}
+     dictToReturn = {'username': input_json['username'], 'password': hashlib.md5(input_json['password'].encode()).hexdigest()}
      jsonify_version = jsonify(dictToReturn)
      db.db.collection.insert_one(dictToReturn)
      return jsonify_version
@@ -54,7 +56,7 @@ def removeOne():
 @app.route('/verify', methods=["POST"])
 def verify():
      input_json = request.get_json(force=True)
-     verify = jsonify(db.db.collection.find_one({"username": input_json['username'], 'password': input_json['password']}))
+     verify = jsonify(db.db.collection.find_one({"username": input_json['username'], 'password': hashlib.md5(input_json['password'].encode()).hexdigest()}))
      print(verify)
      # {"condition": True} if verify==true else {"condition": False}
      # dictToReturn = {'username': input_json['username'], 'password': input_json['password']}
