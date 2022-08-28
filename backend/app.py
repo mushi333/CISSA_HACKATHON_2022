@@ -54,11 +54,13 @@ def removeOne():
 @app.route('/verify', methods=["POST"])
 def verify():
      input_json = request.get_json(force=True)
-     dictToReturn = {'username': input_json['username'], 'password': input_json['password']}
-     jsonify_version = jsonify(dictToReturn)
-     
-     db.db.collection.(dictToReturn)
-     return jsonify_version==dictToReturn
+     verify = jsonify(db.db.collection.find_one({"username": input_json['username'], 'password': input_json['password']}))
+     print(verify)
+     # {"condition": True} if verify==true else {"condition": False}
+     # dictToReturn = {'username': input_json['username'], 'password': input_json['password']}
+     # jsonify_version = jsonify(dictToReturn)
+     # db.db.collection.find_one({"username": input_json['username']})
+     return verify
 
 
 # Put this below all APIs
