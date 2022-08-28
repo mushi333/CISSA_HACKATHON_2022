@@ -1,72 +1,93 @@
-import React, { useState, useEffect } from "react";
-import Header from "./components/Header";
-import AddRecipe from "./components/AddRecipe";
-import RecipeList from "./components/RecipeList";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Background from './components/Background';
 
-function App() {
+const appStyle = {
+    height: '250px',
+    display: 'flex'
+};
 
-  const [showAdd, setShowAdd] = useState(false);
-  const [recipes, setRecipes] = useState([]);
+const formStyle = {
+    margin: 'auto',
+    padding: '10px',
+    border: '1px solid #c9c9c9',
+    borderRadius: '5px',
+    background: '#f5f5f5',
+    width: '220px',
+    display: 'block'
+};
 
-  // runs upon rendering page
-  useEffect(() => {
-    const getRecipes = async () => {
-      const recipesFromApi = await fetchRecipes();
-      setRecipes(recipesFromApi);
-    }
+const labelStyle = {
+    margin: '10px 0 5px 0',
+    fontFamily: 'Arial, Helvetica, sans-serif',
+    fontSize: '15px',
+};
 
-    getRecipes();
-  }, []);
+const inputStyle = {
+    margin: '5px 0 10px 0',
+    padding: '5px', 
+    border: '1px solid #bfbfbf',
+    borderRadius: '3px',
+    boxSizing: 'border-box',
+    width: '100%'
+};
 
-  // fetch recipes from backend
-  const fetchRecipes = async () => {
-    const res = await fetch("/getAll");
-    const data = await res.json();
+const submitStyle = {
+    margin: '10px 0 0 0',
+    padding: '7px 10px',
+    border: '1px solid #efffff',
+    borderRadius: '3px',
+    background: '#3085d6',
+    width: '100%', 
+    fontSize: '15px',
+    color: 'white',
+    display: 'block'
+};
 
-    return data;
-  }
-
-  // adds recipe to server
-  const addRecipe = async (recipe) => {
-    await fetch("/addOne", {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(recipe),
-    });
-
-    const recipesFromApi = await fetchRecipes();
-    setRecipes(recipesFromApi);
-  }
-  
-  // delete recipe from server
-  const deleteRecipe = async (id) => {
-    const toDelete = {_id: id};
-
-    console.log(JSON.stringify(toDelete));
-
-    await fetch('/removeOne', { 
-      method: 'DELETE', 
-      body: JSON.stringify(toDelete),
-    });
-
-    const recipesFromApi = await fetchRecipes();
-    setRecipes(recipesFromApi);
-  }
-
-  return (
-    <div style={{backgroundColor: '#c5cae9', minHeight: '1000px', paddingTop: '20px',}}>
-      <div className='container'>
-        <Header onAdd={() => setShowAdd(!showAdd)} showAdd={showAdd}/>
-        {showAdd && <AddRecipe onAdd={addRecipe}/>}
-        <div>
-          {(recipes.length <= 0) ? (
-            <p>Loading...</p>
-          ) : ( <RecipeList recipes={recipes} onDelete={deleteRecipe} /> )}
-        </div>
+const Field = React.forwardRef(({label, type}, ref) => {
+    return (
+      <div>
+        <label style={labelStyle} >{label}</label>
+        <input ref={ref} type={type} style={inputStyle} />
       </div>
-    </div>);
-}
+    );
+});
+
+const Form = ({onSubmit}) => {
+    const usernameRef = React.useRef();
+    const passwordRef = React.useRef();
+    const handleSubmit = e => {
+        e.preventDefault();
+        const data = {
+            username: usernameRef.current.value,
+            password: passwordRef.current.value
+        };
+        onSubmit(data);
+    };
+    return (
+      <form style={formStyle} onSubmit={handleSubmit} >
+        <Field ref={usernameRef} label="Username:" type="text" />
+        <Field ref={passwordRef} label="Password:" type="password" />
+        <div>
+          <button style={submitStyle} type="submit">Submit</button>
+        </div>
+      </form>
+    );
+};
+
+// Usage example:
+
+const App = () => {
+    const handleSubmit = data => {
+        const json = JSON.stringify(data, null, 4);
+        console.clear();
+        console.log(json);
+    };
+    return (
+      <div style={appStyle}>
+        <Form onSubmit={handleSubmit} />
+      </div>
+    );
+};
 
 export default App;
