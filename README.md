@@ -1,1 +1,1 @@
-CISSA Hackathon 2022 - Tinder for weightlifters
+CISSA Hackathon 2022 - Social platform for weightlifters
